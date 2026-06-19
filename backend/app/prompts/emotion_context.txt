@@ -1,0 +1,3 @@
+Detected Emotion: {emotion}
+Intensity: {intensity}
+Concerning: {is_concerning}

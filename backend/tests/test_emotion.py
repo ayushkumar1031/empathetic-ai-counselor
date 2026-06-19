@@ -1,4 +1,5 @@
 from app.services.emotion import EmotionClassifier
+from app.models.emotion import EmotionResult, EmotionLabel
 import pytest
 
 classifier = EmotionClassifier()
@@ -6,55 +7,48 @@ classifier = EmotionClassifier()
 
 def test_empty_string():
     result = classifier.classify("")
-    assert result["label"] == "neutral"
+    assert result.label == EmotionLabel.NEUTRAL
 
 
 def test_whitespace_string():
     result = classifier.classify("   ")
-    assert result["label"] == "neutral"
+    assert result.label == EmotionLabel.NEUTRAL
 
 
 def test_happy_text():
     result = classifier.classify("I had a wonderful day today")
-    assert "label" in result
-    assert "score" in result
+    assert isinstance(result, EmotionResult)
 
 
 def test_sad_text():
     result = classifier.classify("I feel very sad and lonely")
-    assert "label" in result
-    assert "score" in result
+    assert isinstance(result, EmotionResult)
 
 
 def test_anger_text():
     result = classifier.classify("I am extremely angry")
-    assert "label" in result
-    assert "score" in result
+    assert isinstance(result, EmotionResult)
 
 
 def test_fear_text():
     result = classifier.classify("I am terrified of tomorrow's exam")
-    assert "label" in result
-    assert "score" in result
+    assert isinstance(result, EmotionResult)
 
 
 def test_neutral_text():
     result = classifier.classify("The book is on the table")
-    assert "label" in result
-    assert "score" in result
+    assert isinstance(result, EmotionResult)
 
 
 def test_short_text():
     result = classifier.classify("Hi")
-    assert "label" in result
-    assert "score" in result
+    assert isinstance(result, EmotionResult)
 
 
 def test_long_text():
     text = "I feel stressed " * 1000
     result = classifier.classify(text)
-    assert "label" in result
-    assert "score" in result
+    assert isinstance(result, EmotionResult)
 
 
 def test_type_error_int():
@@ -74,14 +68,14 @@ def test_type_error_dict():
 
 def test_score_type():
     result = classifier.classify("I am happy")
-    assert isinstance(result["score"], float)
+    assert isinstance(result.score, float)
 
 
 def test_label_type():
     result = classifier.classify("I am happy")
-    assert isinstance(result["label"], str)
+    assert isinstance(result.label, EmotionLabel)
 
 
 def test_return_type():
     result = classifier.classify("I am happy")
-    assert isinstance(result, dict)
+    assert isinstance(result, EmotionResult)
